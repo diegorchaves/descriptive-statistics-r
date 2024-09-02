@@ -1,0 +1,107 @@
+---
+title: "Aplicação de Estatística Descritiva em dados de economia de combustível 
+da EPA (Enviroment Protection Agency - USA) utilizando R"
+author: "Diego Ribeiro Chaves"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+# Resumo
+Aqui vai ficar meu resumo, que vou escrever por último.
+Método bibliográfico e experimental.
+Método dedutivo.
+
+# Introdução
+
+Inicialmente, esse artigo teve como objetivo exercitar de maneira prática o uso dos conceitos de Estatística Descritiva bem como a linguagem R em uma base de dados do mundo real. Através dessa pesquisa buscou-se identificar padrões interessantes nos dados a partir do emprego das técnicas estatísticas. Para isso, de início, foi realizada uma análise exploratória dos dados, objetivando uma visão geral da tendência dos mesmos, além da possível presença de anomalias e outliers, bem como foram aplicados os conceitos da estatística descritiva no dataset.
+
+Nessa análise, foi utilizado o conjunto de dados **mpg**, presente no pacote ggplot2, disponível no endereço https://fueleconomy.gov/, o qual contém informações sobre a economia de 
+combustível que a **EPA (Enviroment Protection Agency - USA)**, agência responsável 
+pela proteção da saúde humana e do meio-ambiente, coletou dos modelos de carro 
+que tiveram um lançamento anual no período de 1999 a 2008. O data frame é 
+composto por 234 observações de 11 variáveis, sendo elas: manufacturer, model, 
+displ, year, cyl, trans, drv, cty, hwy, fl, class. O dicionário das variáveis 
+pode ser encontrado no Apêndice. Tomou-se como objetivo da análise aplicar conceitos 
+da Estatística Descritiva para observar aspectos *interessantes nos dados*.
+
+Como ferramentas de pesquisa foram utilizados os conceitos da Estatística Descritiva, em especial as medidas de posição e separatrizes como média, mediana, moda, quartis e percentis. 
+Além disso, as medidas de dispersão amplitude, variância, desvio-padrão e coeficiente 
+de variação de Pearson também foram aplicadas aos dados. O ambiente usado para as análises foi 
+o RStudio na versão 2024.04.2, a linguagem R na versão 4.3.3 "Angel Food Cake" e o pacote 
+tidyverse na versão 2.0.0.
+
+# Análise Exploratória dos Dados
+
+De início, a análise exploratória dos dados teve como objetivo obter *insights* iniciais sobre o conjunto utilizando ferramentas visuais como gráficos criados com o pacote ggplot2, presente no pacote tidyverse. A análise mostrou um aparente coeficiente de correlação entre algumas variáveis, bem como a presença de *outliers*.
+
+O conjunto de dados mpg, utilizado para a pesquisa, está disponível no pacote ggplot2 (versão 3.5.1), o qual foi carregado 
+juntamento com os demais pacotes que compõem o tidyverse utilizando o comando:
+
+```{r, message=FALSE}
+library(tidyverse)
+```
+
+Uma visualização inicial do dataset permite uma visão geral das variáveis que compõem os dados, e foi possível alcançar isso com o comando:
+
+```{r}
+head(mpg)
+```
+
+Como é possível notar, estão presentes as 11 variáveis citadas anteriormente que compõem o dataset.
+
+Além disso, para uma análise inicial, é interessante visualizar um gráfico de pontos com as variáveis displ, hwy e class, uma vez que é possível inferir, pelo conhecimento do funcionamento dos motores veiculares atuais, que possivelmente há uma correlação entre as variáveis displ e hwy.
+
+```{r, echo=FALSE}
+ggplot(mpg, aes(displ, hwy, colour = class)) + 
+  geom_point()
+```
+
+Verifica-se a existência de um coeficiente de correlação negativo aparente entre displ e hwy, uma vez que, o aumento da displ leva à queda da hwy, o que já era de se esperar, pois motores com cilindros de maior volume tendem a gastar mais combustível. Porém, pode-se notar que alguns veículos da classe 2seater se comportam de maneira diferente da usual, pois mesmo tendo motores com grande volume, ainda conseguem uma boa eficiência de combustível. Existem também dois veículos da classe subcompact que se sobressaem aos demais no quesito economia de combustível.
+
+Para uma visualização mais focada nessa duas classes, foi possível criar um subdataset que contém apenas os veículos das classes 2seater e subcompact ao fazer o uso da função filter disponível no pacote dplyr
+
+```{r}
+mpg_2seater_subcompact <- filter(mpg, class == "2seater" | class == "subcompact")
+```
+
+Tendo o subconjunto, utilizou-se o gráfico boxplot para uma sumarização dos dados relativos aos mesmos.
+```{r, echo=FALSE}
+ggplot(mpg_2seater_subcompact, aes(x = class, y = hwy)) + geom_boxplot()
+```
+
+É possível observar com bastante clareza a presença de dois outliers dentre os carros da classe subcompact. Além disso, a classe subcompact apresenta um range maior de valores da variável hwy, enquanto a 2seater fica mais concentrada. Isso será constatado posteriormente com o uso das medidas de dispersão.
+
+Para aproveitar a sumarização fornecida pelo gráfico boxplot, é válido visualizar todas as classes utilizando esse recurso.
+
+```{r, echo=FALSE}
+ggplot(mpg, aes(x = class, y = hwy)) + geom_boxplot()
+```
+
+Dessa maneira, obteve-se uma visão geral de todas as classes, sobre as quais foram feitas análises mais aprofundadas posteriormente.
+
+# Análise Estatística Descritiva
+
+Medidas de Posição: Calcule e discuta as medidas de posição (média, mediana, moda) para as variáveis principais.
+Medidas de Dispersão: Apresente e interprete medidas de dispersão como variância, desvio padrão e amplitude.
+Distribuição de Variáveis: Discuta a distribuição das variáveis (normalidade, simetria, curtose) e apresente gráficos relevantes, como histogramas ou Q-Q plots.
+Correlação Entre Variáveis: Se aplicável, analise a correlação entre variáveis numéricas, usando matrizes de correlação ou gráficos de dispersão.
+
+# Resultados e Discussão
+
+Principais Descobertas: Resuma os resultados mais importantes obtidos com a análise descritiva. Destaque padrões, tendências ou insights inesperados.
+Interpretação dos Resultados: Discuta o significado dos resultados no contexto do problema ou pergunta de pesquisa. Como as medidas estatísticas ajudam a responder as questões levantadas na introdução?
+Comparação com Expectativas: Compare os resultados obtidos com o que era esperado, se aplicável. Isso pode incluir hipóteses iniciais ou comparações com outros estudos.
+
+# Conclusão
+
+Resumo dos Resultados: Faça um resumo conciso dos principais resultados e o que eles implicam para o conjunto de dados.
+Implicações e Relevância: Discuta as implicações práticas dos resultados e sua relevância para o contexto em que os dados estão inseridos.
+Sugestões para Trabalhos Futuros: Indique possíveis direções para análises futuras ou melhorias na análise realizada. Isso pode incluir a aplicação de técnicas mais avançadas ou a análise de outros conjuntos de dados relacionados.
+
+# Referências
+
+Citações: Liste todas as referências bibliográficas, artigos, livros, ou outros recursos que você utilizou para apoiar a análise. Use um formato de citação adequado, como APA, ABNT, ou outro.
+
+# Apêndices
+
+Material Suplementar: Inclua gráficos, tabelas ou códigos que são relevantes, mas que não foram incluídos no corpo principal do documento. Isso ajuda a manter o fluxo do texto principal sem sobrecarregar com detalhes técnicos.
