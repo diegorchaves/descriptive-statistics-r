@@ -79,6 +79,14 @@ ggplot(mpg, aes(x = class, y = hwy)) + geom_boxplot()
 
 Dessa maneira, obteve-se uma visão geral de todas as classes, sobre as quais foram feitas análises mais aprofundadas posteriormente.
 
+Ainda, foi criado um histograma para ilustrar a distribuição de frequência dos valores de hwy, divididos em intervalos de tamanho 5.
+
+```{r, echo=FALSE}
+ggplot(mpg, aes(x = hwy)) + geom_histogram(binwidth = 5, color="black", fill="white")
+```
+
+Dessa forma, foi possível constatar que os dados não seguem a distribuição normal.
+
 # Análise Estatística Descritiva
 
 Medidas de Posição: Calcule e discuta as medidas de posição (média, mediana, moda) para as variáveis principais.
