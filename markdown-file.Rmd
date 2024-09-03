@@ -13,26 +13,23 @@ Método dedutivo.
 
 # Introdução
 
-Inicialmente, esse artigo teve como objetivo exercitar de maneira prática o uso dos conceitos de Estatística Descritiva bem como a linguagem R em uma base de dados do mundo real. Através dessa pesquisa buscou-se identificar padrões interessantes nos dados a partir do emprego das técnicas estatísticas. Para isso, de início, foi realizada uma análise exploratória dos dados, objetivando uma visão geral da tendência dos mesmos, além da possível presença de anomalias e outliers, bem como foram aplicados os conceitos da estatística descritiva no dataset.
+No contexto da mineração de dados, a quantidade de informações disponíveis frequentemente excede a capacidade humana de análise manual. Por isso, torna-se indispensável o uso de ferramentas que possam fornecer insights iniciais sobre os dados, auxiliando na escolha das abordagens mais adequadas para a mineração propriamente dita.
 
-Nessa análise, foi utilizado o conjunto de dados **mpg**, presente no pacote ggplot2, disponível no endereço https://fueleconomy.gov/, o qual contém informações sobre a economia de 
-combustível que a **EPA (Enviroment Protection Agency - USA)**, agência responsável 
-pela proteção da saúde humana e do meio-ambiente, coletou dos modelos de carro 
-que tiveram um lançamento anual no período de 1999 a 2008. O data frame é 
-composto por 234 observações de 11 variáveis, sendo elas: manufacturer, model, 
-displ, year, cyl, trans, drv, cty, hwy, fl, class. O dicionário das variáveis 
-pode ser encontrado no Apêndice. Tomou-se como objetivo da análise aplicar conceitos 
-da Estatística Descritiva para observar aspectos *interessantes nos dados*.
+Uma das ferramentas mais valiosas para esse propósito é a Estatística Descritiva, que permite determinar medidas de dispersão, frequência e correlação dos dados. Esses resultados podem ser visualizados de maneira mais intuitiva por meio de gráficos, o que contribui significativamente para o processo de análise exploratória dos dados.
 
-Como ferramentas de pesquisa foram utilizados os conceitos da Estatística Descritiva, em especial as medidas de posição e separatrizes como média, mediana, moda, quartis e percentis. 
-Além disso, as medidas de dispersão amplitude, variância, desvio-padrão e coeficiente 
-de variação de Pearson também foram aplicadas aos dados. O ambiente usado para as análises foi 
-o RStudio na versão 2024.04.2, a linguagem R na versão 4.3.3 "Angel Food Cake" e o pacote 
-tidyverse na versão 2.0.0.
+Com isso em mente, o presente artigo tem como objetivo explorar o uso das ferramentas da Estatística Descritiva na fase de análise exploratória de um conjunto de dados do mundo real, utilizando a linguagem R e o pacote complementar tidyverse.
+
+# Metodologia
+
+Nesta análise, utilizou-se o conjunto de dados mpg, disponível no pacote ggplot2 e acessível através do endereço fueleconomy.gov. Esse conjunto contém informações sobre a economia de combustível coletadas pela EPA (Environmental Protection Agency - USA), a agência responsável pela proteção da saúde humana e do meio ambiente. Os dados abrangem modelos de carros lançados anualmente no período de 1999 a 2008. O *data frame* é composto por 234 observações e 11 variáveis: manufacturer, model, displ, year, cyl, trans, drv, cty, hwy, fl, e class. O dicionário das variáveis pode ser encontrado no Apêndice.
+
+O objetivo desta análise foi aplicar conceitos da Estatística Descritiva para obter insights iniciais sobre os dados durante a fase de análise exploratória. Para isso, utilizou-se a linguagem R e suas funções básicas, que permitiram o cálculo de medidas importantes, como amplitude, variância, desvio padrão, média, mediana, coeficiente de variação e coeficiente de correlação de Pearson. Além das funções básicas da R, o pacote tidyverse, que inclui pacotes como ggplot2 e dplyr, foi empregado. Para a documentação do processo, utilizou-se o R Markdown, e o ambiente de trabalho escolhido foi a IDE RStudio. A escolha dessas ferramentas se deu pela gratuidade, código aberto, integração de funcionalidades úteis e facilidade de uso.
+
+Para cumprir o objetivo de exercitar o uso de técnicas estatísticas na análise exploratória dos dados, foram utilizadas as funções estatísticas básicas da R, complementadas com visualizações gráficas empregando o pacote ggplot2. Para a manipulação dos dados, utilizou-se o pacote dplyr, especialmente sua função filter.
+
+Esses métodos foram apropriados, pois permitiram a aplicação prática da teoria da Estatística Descritiva no contexto da análise exploratória de dados, uma etapa indispensável no escopo da mineração de dados.
 
 # Análise Exploratória dos Dados
-
-De início, a análise exploratória dos dados teve como objetivo obter *insights* iniciais sobre o conjunto utilizando ferramentas visuais como gráficos criados com o pacote ggplot2, presente no pacote tidyverse. A análise mostrou um aparente coeficiente de correlação entre algumas variáveis, bem como a presença de *outliers*.
 
 O conjunto de dados mpg, utilizado para a pesquisa, está disponível no pacote ggplot2 (versão 3.5.1), o qual foi carregado 
 juntamento com os demais pacotes que compõem o tidyverse utilizando o comando:
