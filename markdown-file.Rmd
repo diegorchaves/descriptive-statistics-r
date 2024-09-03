@@ -1,6 +1,5 @@
 ---
-title: "Aplicação de Estatística Descritiva em dados de economia de combustível 
-da EPA (Enviroment Protection Agency - USA) utilizando R"
+title: "Aplicação de Estatística Descritiva no processo de Análise Exploratória de Dados utilizando R"
 author: "Diego Ribeiro Chaves"
 date: "`r Sys.Date()`"
 output: html_document
@@ -23,9 +22,7 @@ Com isso em mente, o presente artigo tem como objetivo explorar o uso das ferram
 
 Nesta análise, utilizou-se o conjunto de dados mpg, disponível no pacote ggplot2 e acessível através do endereço fueleconomy.gov. Esse conjunto contém informações sobre a economia de combustível coletadas pela EPA (Environmental Protection Agency - USA), a agência responsável pela proteção da saúde humana e do meio ambiente. Os dados abrangem modelos de carros lançados anualmente no período de 1999 a 2008. O *data frame* é composto por 234 observações e 11 variáveis: manufacturer, model, displ, year, cyl, trans, drv, cty, hwy, fl, e class. O dicionário das variáveis pode ser encontrado no Apêndice.
 
-O objetivo desta análise foi aplicar conceitos da Estatística Descritiva para obter insights iniciais sobre os dados durante a fase de análise exploratória. Para isso, utilizou-se a linguagem R e suas funções básicas, que permitiram o cálculo de medidas importantes, como amplitude, variância, desvio padrão, média, mediana, coeficiente de variação e coeficiente de correlação de Pearson. Além das funções básicas da R, o pacote tidyverse, que inclui pacotes como ggplot2 e dplyr, foi empregado. Para a documentação do processo, utilizou-se o R Markdown, e o ambiente de trabalho escolhido foi a IDE RStudio. A escolha dessas ferramentas se deu pela gratuidade, código aberto, integração de funcionalidades úteis e facilidade de uso.
-
-Para cumprir o objetivo de exercitar o uso de técnicas estatísticas na análise exploratória dos dados, foram utilizadas as funções estatísticas básicas da R, complementadas com visualizações gráficas empregando o pacote ggplot2. Para a manipulação dos dados, utilizou-se o pacote dplyr, especialmente sua função filter.
+O objetivo desta análise foi aplicar conceitos da Estatística Descritiva para obter insights iniciais sobre os dados durante a fase de análise exploratória. Para isso, utilizou-se a linguagem R e suas funções básicas, que permitiram o cálculo de medidas importantes, como amplitude, variância, desvio padrão, média, mediana, coeficiente de variação e coeficiente de correlação de Pearson. Além das funções básicas da R, o pacote tidyverse, que inclui pacotes como ggplot2 e dplyr, foi empregado para a criação de gráficos e manipulação dos dados. Para a documentação do processo, utilizou-se o R Markdown, e o ambiente de trabalho escolhido foi a IDE RStudio. A escolha dessas ferramentas se deu pela gratuidade, código aberto, integração de funcionalidades úteis e facilidade de uso.
 
 Esses métodos foram apropriados, pois permitiram a aplicação prática da teoria da Estatística Descritiva no contexto da análise exploratória de dados, uma etapa indispensável no escopo da mineração de dados.
 
