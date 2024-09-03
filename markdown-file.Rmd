@@ -15,7 +15,7 @@ Método dedutivo.
 
 No contexto da mineração de dados, a quantidade de informações disponíveis frequentemente excede a capacidade humana de análise manual. Por isso, torna-se indispensável o uso de ferramentas que possam fornecer insights iniciais sobre os dados, auxiliando na escolha das abordagens mais adequadas para a mineração propriamente dita.
 
-Uma das ferramentas mais valiosas para esse propósito é a Estatística Descritiva, que permite determinar medidas de dispersão, frequência e correlação dos dados. Esses resultados podem ser visualizados de maneira mais intuitiva por meio de gráficos, o que contribui significativamente para o processo de análise exploratória dos dados.
+Uma das ferramentas mais valiosas para esse propósito é a Estatística Descritiva, que permite determinar medidas de dispersão, frequência e correlação dos dados, além de ajudar na detecção de anomalias e incosistências no conjunto de valores. Esses resultados podem ser visualizados de maneira mais intuitiva por meio de gráficos, o que contribui significativamente para o processo de análise exploratória dos dados.
 
 Com isso em mente, o presente artigo tem como objetivo explorar o uso das ferramentas da Estatística Descritiva na fase de análise exploratória de um conjunto de dados do mundo real, utilizando a linguagem R e o pacote complementar tidyverse.
 
