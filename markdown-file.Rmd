@@ -28,8 +28,7 @@ Esses métodos foram apropriados, pois permitiram a aplicação prática da teor
 
 # Análise Exploratória dos Dados
 
-O conjunto de dados mpg, utilizado para a pesquisa, está disponível no pacote ggplot2 (versão 3.5.1), o qual foi carregado 
-juntamento com os demais pacotes que compõem o tidyverse utilizando o comando:
+O conjunto de dados mpg, utilizado para a pesquisa, está disponível no pacote ggplot2 (versão 3.5.1), o qual foi carregado juntamento com os demais pacotes que compõem o tidyverse utilizando o comando:
 
 ```{r, message=FALSE}
 library(tidyverse)
@@ -38,10 +37,10 @@ library(tidyverse)
 Uma visualização inicial do dataset permite uma visão geral das variáveis que compõem os dados, e foi possível alcançar isso com o comando:
 
 ```{r}
-head(mpg)
+glimpse(mpg)
 ```
 
-Como é possível notar, estão presentes as 11 variáveis citadas anteriormente que compõem o dataset.
+Como é possível notar, estão presentes as 11 variáveis citadas anteriormente que compõem o dataset, sendo algumas delas nominais e outras numéricas.
 
 Além disso, para uma análise inicial, é interessante visualizar um gráfico de pontos com as variáveis displ, hwy e class, uma vez que é possível inferir, pelo conhecimento do funcionamento dos motores veiculares atuais, que possivelmente há uma correlação entre as variáveis displ e hwy.
 
@@ -67,7 +66,7 @@ ggplot(mpg_2seater_subcompact, aes(x = class, y = hwy)) + geom_boxplot()
 
 Para aproveitar a sumarização fornecida pelo gráfico boxplot, é válido visualizar todas as classes utilizando esse recurso.
 
-```{r, echo=FALSE}
+```{r}
 ggplot(mpg, aes(x = class, y = hwy)) + geom_boxplot()
 ```
 
@@ -79,7 +78,7 @@ Ainda, foi criado um histograma para ilustrar a distribuição de frequência do
 ggplot(mpg, aes(x = hwy)) + geom_histogram(bins = 9, color="black", fill="white")
 ```
 
-Dessa forma, foi possível constatar que os dados não seguem a distribuição normal.
+Dessa forma, foi possível constatar que os dados não seguem a distribuição normal no que se refere aos valores de hwy.
 
 # Análise Estatística Descritiva
 
@@ -87,6 +86,88 @@ Medidas de Posição: Calcule e discuta as medidas de posição (média, mediana
 Medidas de Dispersão: Apresente e interprete medidas de dispersão como variância, desvio padrão e amplitude.
 Distribuição de Variáveis: Discuta a distribuição das variáveis (normalidade, simetria, curtose) e apresente gráficos relevantes, como histogramas ou Q-Q plots.
 Correlação Entre Variáveis: Se aplicável, analise a correlação entre variáveis numéricas, usando matrizes de correlação ou gráficos de dispersão.
+
+--------------
+
+Iniciando a análise com menor granularidade, analisa-se quais classes são mais "consistentes", e para isso, como existem classes de carros com diferentes médias de consumo (hwy), será utilizado o valor calculado do Coeficiente de Variação de Pearson para comparação. Quanto menor for esse CV, menos os dados variam em torno da média.
+
+Para tal análise, são criados os subconjuntos das classes:
+```{r}
+mpg_2seater <- filter(mpg, class == "2seater")
+mpg_compact <- filter(mpg, class == "compact")
+mpg_midsize <- filter(mpg, class == "midsize")
+mpg_minivan <- filter(mpg, class == "minivan")
+mpg_pickup <- filter(mpg, class == "pickup")
+mpg_subcompact <- filter(mpg, class == "subcompact")
+mpg_suv <- filter(mpg, class == "suv")
+```
+
+
+O gráfico de boxplot mostrado anteriormente volta a ser relevante, para termos uma representação visual da sumarização das classes 
+```{r, echo=FALSE}
+ggplot(mpg, aes(x = class, y = hwy)) + geom_boxplot()
+```
+
+Para o cálculo do desvio padrão de cada classe, faz-se o uso da função **sd** presente no pacote **stats**, nativo do R.
+
+```{r}
+library(stats)
+desvio_padrao_2seater <- sd(mpg_2seater$hwy)
+desvio_padrao_compact <- sd(mpg_compact$hwy)
+desvio_padrao_midsize <- sd(mpg_midsize$hwy)
+desvio_padrao_minivan <- sd(mpg_minivan$hwy)
+desvio_padrao_pickup <- sd(mpg_pickup$hwy)
+desvio_padrao_subcompact <- sd(mpg_subcompact$hwy)
+desvio_padrao_suv <- sd(mpg_suv$hwy)
+```
+
+Para uma melhor visualização dos resultados, cria-se uma tabela com
+
+```{r}
+tabela_desvio_padrao <- data.frame(class = c("2seater", "compact", "midsize", "minivan",
+                                             "pickup", "subcompact", "suv"),
+                                   desvio_padrao = c(desvio_padrao_2seater, desvio_padrao_compact,
+                                              desvio_padrao_midsize, desvio_padrao_minivan,
+                                              desvio_padrao_pickup, desvio_padrao_subcompact,
+                                              desvio_padrao_suv))
+
+print(tabela_desvio_padrao)
+```
+
+Agora, pode-se calcular o CV de Pearson fazendo
+
+```{r}
+cv_2seater <- desvio_padrao_2seater / mean(mpg_2seater$hwy)
+cv_compact <- desvio_padrao_compact / mean(mpg_compact$hwy)
+cv_midsize <- desvio_padrao_midsize / mean(mpg_midsize$hwy)
+cv_minivan <- desvio_padrao_minivan / mean(mpg_minivan$hwy)
+cv_pickup <- desvio_padrao_pickup / mean(mpg_pickup$hwy)
+cv_subcompact <- desvio_padrao_subcompact / mean(mpg_subcompact$hwy)
+cv_suv <- desvio_padrao_suv / mean(mpg_suv$hwy)
+
+tabela_medidas_dispersao_classes <- tabela_desvio_padrao |> mutate(cv = c(cv_2seater, cv_compact,
+                                                                  cv_midsize, cv_minivan,
+                                                                  cv_pickup, cv_subcompact,
+                                                                  cv_suv) * 100)
+print(tabela_medidas_dispersao_classes)
+```
+
+Com isso, tem-se os valores desejados e é possível notar que a classe mais consistente é a 2seater, seguida pela midsize. E as duas menos consistentes são as classes subcompact e suv.
+
+Isso significa que uma pessoa interessada em comprar um carro, por exemplo, ao escolher um veículo da classe 2seater, teria uma maior probabilidade de que o consumo girasse em torno da média da categoria, seria uma compra "mais segura".
+
+Ainda nesse sentido, pode-se analisar o consumo dos carros por marca, fazendo
+```{r}
+ggplot(mpg, aes(x = manufacturer, y = hwy)) + geom_boxplot()
+```
+Nota-se que algumas marcas como Chevrolet, Nissan e Toyota têm veículos com consumos mais diversos, o que pode ser uma consequência do maior número de modelos produzidos por elas. Enquanto os carros da Lincoln e Pontiac não apresentam grande variação no consumo.
+
+No gráfico, também é possível observar que os dois veículos que se sobressaem na economia de combustível são da Volkswagen.
+
+```{r}
+tabela_medidas_dispersao_marcas <- data.frame(marca = mpg$manufacturer)
+```
+
 
 # Resultados e Discussão
 
