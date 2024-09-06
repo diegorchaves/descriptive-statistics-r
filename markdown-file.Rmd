@@ -268,7 +268,21 @@ mpg_2008 <- filter(mpg, year == 2008)
 print(summary(mpg_1999$displ))
 print(summary(mpg_2008$displ))
 ```
-Constata-se que na verdade, carros mais recentes têm motores uma média maior de litragem.
+Constata-se que na verdade carros mais recentes têm motores uma média maior de litragem, entretanto tem uma média menor de consumo, o que pode ser explicado pelo avanço da engenharia de motores, que trouxe modelos mais eficientes.
+
+```{r}
+print(summary(mpg_1999$hwy))
+print(summary(mpg_2008$hwy))
+```
+
+É valida investigar se determinada marca foca sua produção em carros de determinada categoria. Isso pode ser alcançado ao criar o gráfico
+
+```{r}
+ggplot(mpg, aes(manufacturer, class, colour = manufacturer)) + 
+  geom_count()
+```
+
+O gráfico mostra que marcar como Chevrolet, Toyota e Volkswagen têm veículos de diversas classes, enquanto Jeep, Land Rover e Mercury são especializadas em SUVs.
 
 # Resultados e Discussão
 
