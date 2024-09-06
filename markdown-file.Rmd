@@ -243,6 +243,33 @@ ggplot(mpg, aes(x = manufacturer)) +
 
 Assim, como tem-se quantidades de exemplos de cada marca, a análise comparativa entre as marcas fica comprometida.
 
+----
+É interessante analisar se existe uma relação entre o ano de fabricação dos veículos e o consumo, para tal fim, cria-se um gráfico de pontos com os anos no eixo x e o consumo no eixo y.
+
+```{r}
+ggplot(mpg, aes(year, hwy)) + 
+  geom_point()
+```
+
+Esse gráfico demonstra que os modelos "mais gastadores" são os mais antigos, isso poderia ser uma consequência do fato de que os motores mais clássicos tendem a ser maiores e menos eficientes. Para investigar essa hipótese, cria-se o gráfico de pontos comparando o ano no eixo x e displ no eixo y.
+
+```{r}
+ggplot(mpg, aes(year, displ)) + 
+  geom_point()
+```
+
+A hipótese mostrou-se infundada, pois não existe uma tendência de diferença na litragem dos motores entre os anos. Para sumarizar essas medidas, pode-se fazer
+
+
+```{r}
+mpg_1999 <- filter(mpg, year == 1999)
+mpg_2008 <- filter(mpg, year == 2008)
+
+print(summary(mpg_1999$displ))
+print(summary(mpg_2008$displ))
+```
+Constata-se que na verdade, carros mais recentes têm motores uma média maior de litragem.
+
 # Resultados e Discussão
 
 Principais Descobertas: Resuma os resultados mais importantes obtidos com a análise descritiva. Destaque padrões, tendências ou insights inesperados.
