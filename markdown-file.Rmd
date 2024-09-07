@@ -333,7 +333,9 @@ Sugestões para Trabalhos Futuros: Indique possíveis direções para análises 
 
 # Referências
 
-Citações: Liste todas as referências bibliográficas, artigos, livros, ou outros recursos que você utilizou para apoiar a análise. Use um formato de citação adequado, como APA, ABNT, ou outro.
+ASSUNÇÃO,  Joaquim Vinicius Carvalho. Uma breve introdução à Mineração de Dados: Bases para a ciência de dados, com exemplos em R. 1. ed. São Paulo: Novatec Editora, 2021. ISBN 9786586057508. 
+
+SILVA, Leandro Augusto Da; PERES, Sarajane Marques;  BOSCARIOLI, Clodis. Introdução à Mineração de Dados: Com Aplicações em R. 1. ed. Barueri: GEN LTC, 2016. ISBN 9788535284478.
 
 # Apêndices
 
