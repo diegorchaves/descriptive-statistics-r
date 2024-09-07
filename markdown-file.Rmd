@@ -306,6 +306,7 @@ Nota-se um aparente coeficiente de correlação negativo entre essas variávies,
 coef_corr_hwy_disp <- cor(mpg$hwy, mpg$displ)
 print(coef_corr_hwy_disp)
 ```
+
 Como os valores do coeficiente variam de -1 a +1, o valor calculado mostra uma forte correlação negativa entre as duas variáveis, o que já era de se esperar pelo contexto, uma vez que maior litragem em um motor reduz a economia de combustível do mesmo.
 
 Mas, e aqueles outliers presentes na classe subcompact?
@@ -344,4 +345,9 @@ SILVA, Leandro Augusto Da; PERES, Sarajane Marques;  BOSCARIOLI, Clodis. Introdu
 
 # Apêndices
 
-Material Suplementar: Inclua gráficos, tabelas ou códigos que são relevantes, mas que não foram incluídos no corpo principal do documento. Isso ajuda a manter o fluxo do texto principal sem sobrecarregar com detalhes técnicos.
+Dicionário de variáveis
+
+```{r, echo=FALSE}
+knitr::include_graphics("./dicionario-variaveis.png")
+```
+
