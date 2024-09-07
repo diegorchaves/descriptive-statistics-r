@@ -58,6 +58,7 @@ mpg_2seater_subcompact <- filter(mpg, class == "2seater" | class == "subcompact"
 ```
 
 Tendo o subconjunto, utilizou-se o gráfico boxplot para uma sumarização dos dados relativos aos mesmos.
+
 ```{r, echo=FALSE}
 ggplot(mpg_2seater_subcompact, aes(x = class, y = hwy)) + geom_boxplot()
 ```
@@ -87,11 +88,10 @@ Medidas de Dispersão: Apresente e interprete medidas de dispersão como variân
 Distribuição de Variáveis: Discuta a distribuição das variáveis (normalidade, simetria, curtose) e apresente gráficos relevantes, como histogramas ou Q-Q plots.
 Correlação Entre Variáveis: Se aplicável, analise a correlação entre variáveis numéricas, usando matrizes de correlação ou gráficos de dispersão.
 
---------------
-
 Iniciando a análise com menor granularidade, analisa-se quais classes são mais "consistentes", e para isso, como existem classes de carros com diferentes médias de consumo (hwy), será utilizado o valor calculado do Coeficiente de Variação de Pearson para comparação. Quanto menor for esse CV, menos os dados variam em torno da média.
 
 Para tal análise, são criados os subconjuntos das classes:
+
 ```{r}
 mpg_2seater <- filter(mpg, class == "2seater")
 mpg_compact <- filter(mpg, class == "compact")
@@ -103,7 +103,8 @@ mpg_suv <- filter(mpg, class == "suv")
 ```
 
 
-O gráfico de boxplot mostrado anteriormente volta a ser relevante, para termos uma representação visual da sumarização das classes 
+O gráfico de boxplot mostrado anteriormente volta a ser relevante, para termos uma representação visual da sumarização das classes:
+
 ```{r, echo=FALSE}
 ggplot(mpg, aes(x = class, y = hwy)) + geom_boxplot()
 ```
@@ -164,10 +165,12 @@ ggplot(mpg, aes(x = class)) +
 ```
 
 Ainda nesse sentido, pode-se analisar o consumo dos carros por marca, fazendo
+
 ```{r}
 ggplot(mpg, aes(x = manufacturer, y = hwy)) + 
   geom_boxplot()
 ```
+
 Nota-se que algumas marcas como Chevrolet, Nissan e Toyota têm veículos com consumos mais diversos, o que pode ser uma consequência do maior número de modelos produzidos por elas. Enquanto os carros da Lincoln e Pontiac não apresentam grande variação no consumo.
 
 No gráfico, também é possível observar que os dois veículos que se sobressaem na economia de combustível são da Volkswagen.
@@ -194,6 +197,7 @@ mpg_volkswagen <- filter(mpg, manufacturer == "volkswagen")
 ```
 
 Agora, calcula-se o desvio padrão de cada marca com
+
 ```{r}
 library(stats)
 desvio_padrao_audi <- sd(mpg_audi$hwy)
@@ -244,7 +248,6 @@ ggplot(mpg, aes(x = manufacturer)) +
 
 Assim, como tem-se quantidades de exemplos de cada marca, a análise comparativa entre as marcas fica comprometida.
 
-----
 É interessante analisar se existe uma relação entre o ano de fabricação dos veículos e o consumo, para tal fim, cria-se um gráfico de pontos com os anos no eixo x e o consumo no eixo y.
 
 ```{r}
@@ -259,26 +262,29 @@ ggplot(mpg, aes(year, displ)) +
   geom_point()
 ```
 
-A hipótese mostrou-se infundada, pois não existe uma tendência de diferença na litragem dos motores entre os anos. Para sumarizar essas medidas, pode-se fazer
+A hipótese mostrou-se infundada, pois não existe uma tendência de diferença na litragem dos motores entre os anos. Para sumarizar essas medidas, pode-se fazer para os carros de 1999:
 
+```{r, echo=FALSE}
+mpg_1999 <- filter(mpg, year == 1999)
+```
 
 ```{r}
-mpg_1999 <- filter(mpg, year == 1999)
-mpg_2008 <- filter(mpg, year == 2008)
-
 print(summary(mpg_1999$displ))
+```
+
+E para os carros de 2008:
+
+```{r, echo=FALSE}
+mpg_2008 <- filter(mpg, year == 2008)
+```
+
+```{r}
 print(summary(mpg_2008$displ))
 ```
+
 Constata-se que na verdade carros mais recentes têm motores com uma média maior de litragem, entretanto tem uma média menor de consumo, o que pode ser explicado pelo avanço da engenharia de motores, que trouxe modelos mais eficientes.
 
-```{r}
-print(summary(mpg_1999$hwy))
-print(summary(mpg_2008$hwy))
-```
-
-----
-
-É valida investigar se determinada marca foca sua produção em carros de determinada categoria. Isso pode ser alcançado ao criar o gráfico
+É valido investigar se determinada marca foca sua produção em carros de determinada categoria. Isso pode ser alcançado ao criar o gráfico
 
 ```{r}
 ggplot(mpg, aes(manufacturer, class, colour = manufacturer)) + 
@@ -286,8 +292,6 @@ ggplot(mpg, aes(manufacturer, class, colour = manufacturer)) +
 ```
 
 O gráfico mostra que marcar como Chevrolet, Toyota e Volkswagen têm veículos de diversas classes, enquanto Jeep, Land Rover e Mercury são especializadas em SUVs.
-
-----
 
 Agora, ao analisar o gráfico de pontos que relaciona as variáveis displ e hwy
 
@@ -305,11 +309,14 @@ print(coef_corr_hwy_disp)
 Como os valores do coeficiente variam de -1 a +1, o valor calculado mostra uma forte correlação negativa entre as duas variáveis, o que já era de se esperar pelo contexto, uma vez que maior litragem em um motor reduz a economia de combustível do mesmo.
 
 Mas, e aqueles outliers presentes na classe subcompact?
+
 ```{r}
 mpg_subcompact <- filter(mpg, class == "subcompact")
 ggplot(mpg_subcompact, aes(x = class, y = hwy)) + 
   geom_boxplot()
 ```
+
+
 ```{r}
 mpg_subcompact_sorted <- mpg_subcompact |>
     arrange(desc(hwy))
@@ -318,8 +325,6 @@ head(mpg_subcompact_sorted)
 ```
 
 Ao ordenar o dataset da classe subcompact de maneira decrescente pelo hwy, pode-se observar que os dois carros que se sobressaem ao demais no quesito economia são do mesmo modelo, New Beetle da Volkswagen, ambos do ano 1999.
-
------
 
 # Resultados e Discussão
 
