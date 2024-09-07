@@ -165,7 +165,8 @@ ggplot(mpg, aes(x = class)) +
 
 Ainda nesse sentido, pode-se analisar o consumo dos carros por marca, fazendo
 ```{r}
-ggplot(mpg, aes(x = manufacturer, y = hwy)) + geom_boxplot()
+ggplot(mpg, aes(x = manufacturer, y = hwy)) + 
+  geom_boxplot()
 ```
 Nota-se que algumas marcas como Chevrolet, Nissan e Toyota têm veículos com consumos mais diversos, o que pode ser uma consequência do maior número de modelos produzidos por elas. Enquanto os carros da Lincoln e Pontiac não apresentam grande variação no consumo.
 
@@ -268,12 +269,14 @@ mpg_2008 <- filter(mpg, year == 2008)
 print(summary(mpg_1999$displ))
 print(summary(mpg_2008$displ))
 ```
-Constata-se que na verdade carros mais recentes têm motores uma média maior de litragem, entretanto tem uma média menor de consumo, o que pode ser explicado pelo avanço da engenharia de motores, que trouxe modelos mais eficientes.
+Constata-se que na verdade carros mais recentes têm motores com uma média maior de litragem, entretanto tem uma média menor de consumo, o que pode ser explicado pelo avanço da engenharia de motores, que trouxe modelos mais eficientes.
 
 ```{r}
 print(summary(mpg_1999$hwy))
 print(summary(mpg_2008$hwy))
 ```
+
+----
 
 É valida investigar se determinada marca foca sua produção em carros de determinada categoria. Isso pode ser alcançado ao criar o gráfico
 
@@ -284,10 +287,12 @@ ggplot(mpg, aes(manufacturer, class, colour = manufacturer)) +
 
 O gráfico mostra que marcar como Chevrolet, Toyota e Volkswagen têm veículos de diversas classes, enquanto Jeep, Land Rover e Mercury são especializadas em SUVs.
 
+----
+
 Agora, ao analisar o gráfico de pontos que relaciona as variáveis displ e hwy
 
 ```{r, echo=FALSE}
-ggplot(mpg, aes(displ, hwy)) + 
+ggplot(mpg, aes(displ, hwy, colour = class)) + 
   geom_point()
 ```
 
@@ -299,6 +304,22 @@ print(coef_corr_hwy_disp)
 ```
 Como os valores do coeficiente variam de -1 a +1, o valor calculado mostra uma forte correlação negativa entre as duas variáveis, o que já era de se esperar pelo contexto, uma vez que maior litragem em um motor reduz a economia de combustível do mesmo.
 
+Mas, e aqueles outliers presentes na classe subcompact?
+```{r}
+mpg_subcompact <- filter(mpg, class == "subcompact")
+ggplot(mpg_subcompact, aes(x = class, y = hwy)) + 
+  geom_boxplot()
+```
+```{r}
+mpg_subcompact_sorted <- mpg_subcompact |>
+    arrange(desc(hwy))
+
+head(mpg_subcompact_sorted)
+```
+
+Ao ordenar o dataset da classe subcompact de maneira decrescente pelo hwy, pode-se observar que os dois carros que se sobressaem ao demais no quesito economia são do mesmo modelo, New Beetle da Volkswagen, ambos do ano 1999.
+
+-----
 
 # Resultados e Discussão
 
