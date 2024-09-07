@@ -284,11 +284,25 @@ ggplot(mpg, aes(manufacturer, class, colour = manufacturer)) +
 
 O gráfico mostra que marcar como Chevrolet, Toyota e Volkswagen têm veículos de diversas classes, enquanto Jeep, Land Rover e Mercury são especializadas em SUVs.
 
+Agora, ao analisar o gráfico de pontos que relaciona as variáveis displ e hwy
+
+```{r, echo=FALSE}
+ggplot(mpg, aes(displ, hwy)) + 
+  geom_point()
+```
+
+Nota-se um aparente coeficiente de correlação negativo entre essas variávies, o que pode ser investigado ao fazer o cálculo do coeficiente de Pearson:
+
+```{r}
+coef_corr_hwy_disp <- cor(mpg$hwy, mpg$displ)
+print(coef_corr_hwy_disp)
+```
+Como os valores do coeficiente variam de -1 a +1, o valor calculado mostra uma forte correlação negativa entre as duas variáveis, o que já era de se esperar pelo contexto, uma vez que maior litragem em um motor reduz a economia de combustível do mesmo.
+
+
 # Resultados e Discussão
 
-Principais Descobertas: Resuma os resultados mais importantes obtidos com a análise descritiva. Destaque padrões, tendências ou insights inesperados.
-Interpretação dos Resultados: Discuta o significado dos resultados no contexto do problema ou pergunta de pesquisa. Como as medidas estatísticas ajudam a responder as questões levantadas na introdução?
-Comparação com Expectativas: Compare os resultados obtidos com o que era esperado, se aplicável. Isso pode incluir hipóteses iniciais ou comparações com outros estudos.
+
 
 # Conclusão
 
