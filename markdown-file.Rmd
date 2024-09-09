@@ -1,8 +1,8 @@
 ---
 title: "Aplicação de Estatística Descritiva no processo de Análise Exploratória de Dados utilizando R"
 author: "Diego Ribeiro Chaves"
-date: "`r Sys.Date()`"
-output: html_document
+//date: "`r Sys.Date()`"
+output: pdf_document
 ---
 
 # Resumo
@@ -40,7 +40,7 @@ library(tidyverse)
 ```
 Para garantir a boa visualização dos gráficos mesmo para pessoas com deficiência de visão de cores, utiliza-se a paleta de cores do pacote viridis:
 
-```{r}
+```{r, message=FALSE}
 library(viridis)
 ```
 
