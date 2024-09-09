@@ -6,9 +6,14 @@ output: html_document
 ---
 
 # Resumo
-Aqui vai ficar meu resumo, que vou escrever por último.
-Método bibliográfico e experimental.
-Método dedutivo.
+
+Neste artigo, foi explorada a aplicação de técnicas de Estatística Descritiva na análise exploratória de dados utilizando a linguagem R e o pacote tidyverse. O objetivo principal foi obter insights iniciais sobre um conjunto de dados do mundo real, especificamente o conjunto mpg disponível no pacote ggplot2, que contém informações sobre a economia de combustível de veículos fabricados entre 1999 e 2008.
+
+Utilizando medidas de posição e dispersão, além de gráficos de dispersão, boxplots e histogramas, fez-se uma análise detalhada das variáveis do conjunto de dados. Observou-se uma correlação negativa entre o volume do motor e a eficiência de combustível, consistente com a expectativa de que motores maiores consomem mais combustível. Foi identificado também que a classe 2seater é a mais consistente em termos de economia de combustível, enquanto as classes subcompact e suv apresentam maior variabilidade. Entre as marcas, a Lincoln destacou-se pela menor variação no consumo de combustível.
+
+Os resultados indicam avanços na engenharia automotiva, com melhorias na eficiência de combustível ao longo dos anos, apesar do aumento do tamanho médio dos motores. A análise revelou também outliers notáveis, como o modelo New Beetle da Volkswagen, que apresenta excelente eficiência de combustível.
+
+Este estudo oferece uma base para consumidores e fabricantes avaliarem a eficiência dos veículos e sugere caminhos para futuras pesquisas, incluindo a exploração de técnicas avançadas de modelagem e a análise de dados adicionais para uma compreensão mais completa do desempenho dos veículos.
 
 # Introdução
 
@@ -33,6 +38,11 @@ O conjunto de dados mpg, utilizado para a pesquisa, está disponível no pacote 
 ```{r, message=FALSE}
 library(tidyverse)
 ```
+Para garantir a boa visualização dos gráficos mesmo para pessoas com deficiência de visão de cores, utiliza-se a paleta de cores do pacote viridis:
+
+```{r}
+library(viridis)
+```
 
 Uma visualização inicial do dataset permite uma visão geral das variáveis que compõem os dados, e foi possível alcançar isso com o comando:
 
@@ -42,33 +52,37 @@ glimpse(mpg)
 
 Como é possível notar, estão presentes as 11 variáveis citadas anteriormente que compõem o dataset, sendo algumas delas nominais e outras numéricas.
 
-Além disso, para uma análise inicial, é interessante visualizar um gráfico de pontos com as variáveis displ, hwy e class, uma vez que é possível inferir, pelo conhecimento do funcionamento dos motores veiculares atuais, que possivelmente há uma correlação entre as variáveis displ e hwy.
+Além disso, para uma análise inicial, é interessante visualizar um gráfico de pontos com as variáveis displ, hwy e class, uma vez que é possível inferir, pelo conhecimento do funcionamento dos motores veiculares atuais, que possivelmente há uma correlação entre as variáveis displ e hwy:
 
-```{r, echo=FALSE}
-ggplot(mpg, aes(displ, hwy, colour = class)) + 
-  geom_point()
+```{r}
+ggplot(mpg, aes(displ, hwy, color = class, shape = class)) + 
+  geom_point() +
+  scale_color_viridis(discrete = TRUE) +
+  scale_shape_manual(values = 1:7)
 ```
 
-Verifica-se a existência de um coeficiente de correlação negativo aparente entre displ e hwy, uma vez que, o aumento da displ leva à queda da hwy, o que já era de se esperar, pois motores com cilindros de maior volume tendem a gastar mais combustível. Porém, pode-se notar que alguns veículos da classe 2seater se comportam de maneira diferente da usual, pois mesmo tendo motores com grande volume, ainda conseguem uma boa eficiência de combustível. Existem também dois veículos da classe subcompact que se sobressaem aos demais no quesito economia de combustível.
+Verifica-se a existência de um coeficiente de correlação negativo aparente entre displ e hwy, uma vez que o aumento da displ leva à queda da hwy, o que já era de se esperar, pois motores com cilindros de maior volume tendem a gastar mais combustível. Porém, pode-se notar que alguns veículos da classe 2seater se comportam de maneira diferente da usual, pois mesmo tendo motores com grande volume, ainda conseguem uma boa eficiência de combustível. Existem também dois veículos da classe subcompact que se sobressaem aos demais no quesito economia de combustível.
 
-Para uma visualização mais focada nessa duas classes, foi possível criar um subdataset que contém apenas os veículos das classes 2seater e subcompact ao fazer o uso da função filter disponível no pacote dplyr
+Para uma visualização mais focada nessa duas classes, foi possível criar um subdataset que contém apenas os veículos das classes 2seater e subcompact ao fazer o uso da função filter disponível no pacote dplyr:
 
 ```{r}
 mpg_2seater_subcompact <- filter(mpg, class == "2seater" | class == "subcompact")
 ```
 
-Tendo o subconjunto, utilizou-se o gráfico boxplot para uma sumarização dos dados relativos aos mesmos.
+Tendo o subconjunto, utilizou-se o gráfico boxplot para uma sumarização dos dados relativos aos mesmos:
 
 ```{r, echo=FALSE}
-ggplot(mpg_2seater_subcompact, aes(x = class, y = hwy)) + geom_boxplot()
+ggplot(mpg_2seater_subcompact, aes(x = class, y = hwy)) + 
+  geom_boxplot()
 ```
 
 É possível observar com bastante clareza a presença de dois outliers dentre os carros da classe subcompact. Além disso, a classe subcompact apresenta um range maior de valores da variável hwy, enquanto a 2seater fica mais concentrada. Isso será constatado posteriormente com o uso das medidas de dispersão.
 
-Para aproveitar a sumarização fornecida pelo gráfico boxplot, é válido visualizar todas as classes utilizando esse recurso.
+Para aproveitar a sumarização fornecida pelo gráfico boxplot, é válido visualizar todas as classes utilizando esse recurso:
 
 ```{r}
-ggplot(mpg, aes(x = class, y = hwy)) + geom_boxplot()
+ggplot(mpg, aes(x = class, y = hwy)) + 
+  geom_boxplot()
 ```
 
 Dessa maneira, obteve-se uma visão geral de todas as classes, sobre as quais foram feitas análises mais aprofundadas posteriormente.
@@ -76,17 +90,13 @@ Dessa maneira, obteve-se uma visão geral de todas as classes, sobre as quais fo
 Ainda, foi criado um histograma para ilustrar a distribuição de frequência dos valores de hwy, divididos em 9 classes, seguindo a regra de Sturges, na qual o número de classes é dado por **k = 1 + 3.3 log n**, onde n equivale ao número de observações, nesse caso 234.
 
 ```{r}
-ggplot(mpg, aes(x = hwy)) + geom_histogram(bins = 9, color="black", fill="white")
+ggplot(mpg, aes(x = hwy)) + 
+  geom_histogram(bins = 9, color="black", fill="white")
 ```
 
 Dessa forma, foi possível constatar que os dados não seguem a distribuição normal no que se refere aos valores de hwy.
 
 # Análise Estatística Descritiva
-
-Medidas de Posição: Calcule e discuta as medidas de posição (média, mediana, moda) para as variáveis principais.
-Medidas de Dispersão: Apresente e interprete medidas de dispersão como variância, desvio padrão e amplitude.
-Distribuição de Variáveis: Discuta a distribuição das variáveis (normalidade, simetria, curtose) e apresente gráficos relevantes, como histogramas ou Q-Q plots.
-Correlação Entre Variáveis: Se aplicável, analise a correlação entre variáveis numéricas, usando matrizes de correlação ou gráficos de dispersão.
 
 Iniciando a análise com menor granularidade, analisa-se quais classes são mais "consistentes", e para isso, como existem classes de carros com diferentes médias de consumo (hwy), será utilizado o valor calculado do Coeficiente de Variação de Pearson para comparação. Quanto menor for esse CV, menos os dados variam em torno da média.
 
@@ -106,10 +116,11 @@ mpg_suv <- filter(mpg, class == "suv")
 O gráfico de boxplot mostrado anteriormente volta a ser relevante, para termos uma representação visual da sumarização das classes:
 
 ```{r, echo=FALSE}
-ggplot(mpg, aes(x = class, y = hwy)) + geom_boxplot()
+ggplot(mpg, aes(x = class, y = hwy)) + 
+  geom_boxplot()
 ```
 
-Para o cálculo do desvio padrão de cada classe, faz-se o uso da função **sd** presente no pacote **stats**, nativo do R.
+Para o cálculo do desvio padrão de cada classe, faz-se o uso da função **sd** presente no pacote **stats**, nativo do R:
 
 ```{r}
 library(stats)
@@ -122,7 +133,7 @@ desvio_padrao_subcompact <- sd(mpg_subcompact$hwy)
 desvio_padrao_suv <- sd(mpg_suv$hwy)
 ```
 
-Para uma melhor visualização dos resultados, cria-se uma tabela com
+Para uma melhor visualização dos resultados, cria-se uma tabela com:
 
 ```{r}
 tabela_desvio_padrao <- data.frame(class = c("2seater", "compact", "midsize", "minivan",
@@ -135,7 +146,7 @@ tabela_desvio_padrao <- data.frame(class = c("2seater", "compact", "midsize", "m
 print(tabela_desvio_padrao)
 ```
 
-Agora, pode-se calcular o CV de Pearson fazendo
+Agora, pode-se calcular o CV de Pearson fazendo:
 
 ```{r}
 cv_2seater <- desvio_padrao_2seater / mean(mpg_2seater$hwy)
@@ -164,7 +175,7 @@ ggplot(mpg, aes(x = class)) +
   geom_bar(color = "black", fill = "white")
 ```
 
-Ainda nesse sentido, pode-se analisar o consumo dos carros por marca, fazendo
+Ainda nesse sentido, pode-se analisar o consumo dos carros por marca, fazendo:
 
 ```{r}
 ggplot(mpg, aes(x = manufacturer, y = hwy)) + 
@@ -196,7 +207,7 @@ mpg_volkswagen <- filter(mpg, manufacturer == "volkswagen")
 
 ```
 
-Agora, calcula-se o desvio padrão de cada marca com
+Agora, calcula-se o desvio padrão de cada marca com:
 
 ```{r}
 library(stats)
@@ -239,7 +250,7 @@ tabela_medidas_dispersao_marcas <- data.frame(marca = c("audi", "chevrolet", "do
 print(tabela_medidas_dispersao_marcas)
 ```
 
-Com esses resultados, podemos notar que a marca que apresentou menor variação em torno da média foi a Lincoln, seguida pela Pontiac. Esses resultados não necessariamente mostram que essas são as marcas mais consistentes, uma vez que tem-se diferentes quantidades de exemplos de cada marca, como pode-se ver ao fazer um gráfico de barras
+Com esses resultados, podemos notar que a marca que apresentou menor variação em torno da média foi a Lincoln, seguida pela Pontiac. Esses resultados não necessariamente mostram que essas são as marcas mais consistentes, uma vez que tem-se diferentes quantidades de exemplos de cada marca, como pode-se ver ao fazer um gráfico de barras:
 
 ```{r}
 ggplot(mpg, aes(x = manufacturer)) +
@@ -248,14 +259,14 @@ ggplot(mpg, aes(x = manufacturer)) +
 
 Assim, como tem-se quantidades de exemplos de cada marca, a análise comparativa entre as marcas fica comprometida.
 
-É interessante analisar se existe uma relação entre o ano de fabricação dos veículos e o consumo, para tal fim, cria-se um gráfico de pontos com os anos no eixo x e o consumo no eixo y.
+É interessante analisar se existe uma relação entre o ano de fabricação dos veículos e o consumo, para tal fim, cria-se um gráfico de pontos com os anos no eixo x e o consumo no eixo y:
 
 ```{r}
 ggplot(mpg, aes(year, hwy)) + 
   geom_point()
 ```
 
-Esse gráfico demonstra que os modelos "mais gastadores" são os mais antigos, isso poderia ser uma consequência do fato de que os motores mais clássicos tendem a ser maiores e menos eficientes. Para investigar essa hipótese, cria-se o gráfico de pontos comparando o ano no eixo x e displ no eixo y.
+Esse gráfico demonstra que os modelos "mais gastadores" são os mais antigos, isso poderia ser uma consequência do fato de que os motores mais clássicos tendem a ser maiores e menos eficientes. Para investigar essa hipótese, cria-se o gráfico de pontos comparando o ano no eixo x e displ no eixo y:
 
 ```{r}
 ggplot(mpg, aes(year, displ)) + 
@@ -284,20 +295,24 @@ print(summary(mpg_2008$displ))
 
 Constata-se que na verdade carros mais recentes têm motores com uma média maior de litragem, entretanto tem uma média menor de consumo, o que pode ser explicado pelo avanço da engenharia de motores, que trouxe modelos mais eficientes.
 
-É valido investigar se determinada marca foca sua produção em carros de determinada categoria. Isso pode ser alcançado ao criar o gráfico
+É valido investigar se determinada marca foca sua produção em carros de determinada categoria. Isso pode ser alcançado ao criar o gráfico:
 
 ```{r}
-ggplot(mpg, aes(manufacturer, class, colour = manufacturer)) + 
-  geom_count()
+ggplot(mpg, aes(manufacturer, class, colour = manufacturer, shape = manufacturer)) + 
+  geom_count() +
+  scale_color_viridis(discrete = TRUE) +
+  scale_shape_manual(values = 1:15)
 ```
 
 O gráfico mostra que marcar como Chevrolet, Toyota e Volkswagen têm veículos de diversas classes, enquanto Jeep, Land Rover e Mercury são especializadas em SUVs.
 
-Agora, ao analisar o gráfico de pontos que relaciona as variáveis displ e hwy
+Agora, ao analisar o gráfico de pontos que relaciona as variáveis displ e hwy:
 
 ```{r, echo=FALSE}
-ggplot(mpg, aes(displ, hwy, colour = class)) + 
-  geom_point()
+ggplot(mpg, aes(displ, hwy, colour = class, shape = class)) + 
+  geom_point() +
+  scale_color_viridis(discrete = TRUE) +
+  scale_shape_manual(values = 1:7)
 ```
 
 Nota-se um aparente coeficiente de correlação negativo entre essas variávies, o que pode ser investigado ao fazer o cálculo do coeficiente de Pearson:
@@ -327,15 +342,25 @@ head(mpg_subcompact_sorted)
 
 Ao ordenar o dataset da classe subcompact de maneira decrescente pelo hwy, pode-se observar que os dois carros que se sobressaem ao demais no quesito economia são do mesmo modelo, New Beetle da Volkswagen, ambos do ano 1999.
 
-# Resultados e Discussão
-
-
-
 # Conclusão
 
-Resumo dos Resultados: Faça um resumo conciso dos principais resultados e o que eles implicam para o conjunto de dados.
-Implicações e Relevância: Discuta as implicações práticas dos resultados e sua relevância para o contexto em que os dados estão inseridos.
-Sugestões para Trabalhos Futuros: Indique possíveis direções para análises futuras ou melhorias na análise realizada. Isso pode incluir a aplicação de técnicas mais avançadas ou a análise de outros conjuntos de dados relacionados.
+### Resumo dos Resultados
+
+A análise exploratória dos dados do conjunto mpg, utilizando ferramentas da Estatística Descritiva no R, revelou insights significativos sobre o consumo de combustível de veículos fabricados entre 1999 e 2008. Através da aplicação de medidas de posição e dispersão, gráficos de dispersão, boxplots e histogramas, foi possível identificar padrões e anomalias no consumo de combustível (variável hwy) em relação a outras variáveis, como o volume do motor (displ) e a classe dos veículos.
+
+Observou-se uma correlação negativa entre o volume do motor e a eficiência de combustível, consistente com o entendimento de que motores maiores tendem a consumir mais combustível. Além disso, a análise revelou que os veículos da classe 2seater são os mais consistentes em termos de economia de combustível, enquanto as classes subcompact e suv apresentaram maior variabilidade. Entre as marcas, a Lincoln demonstrou menor variação no consumo de combustível, embora essa constatação deva ser contextualizada pela disparidade no número de modelos analisados.
+
+Os outliers identificados na classe subcompact foram principalmente veículos do modelo New Beetle da Volkswagen, destacando-se pela excelente eficiência de combustível, o que pode ser um ponto de interesse para análises futuras.
+
+### Implicações e Relevância
+
+Os resultados obtidos têm implicações práticas para consumidores e fabricantes de veículos. Para os consumidores, a análise pode orientar a escolha de veículos com base na consistência do consumo de combustível dentro de uma categoria específica. Para os fabricantes, os dados sugerem que, ao focar na melhoria da eficiência de combustível, modelos com menor variabilidade em torno da média podem representar uma vantagem competitiva. Além disso, as tendências observadas ao longo dos anos indicam avanços na engenharia automotiva, com motores mais recentes apresentando melhor eficiência, apesar do aumento do tamanho médio dos motores.
+
+### Sugestões para Trabalhos Futuros
+
+Para aprofundar a análise, recomenda-se a exploração de técnicas mais avançadas de análise de dados, como a modelagem estatística e a aprendizagem de máquina, para prever o consumo de combustível com base em múltiplas variáveis simultaneamente. Além disso, a inclusão de dados mais recentes e de outros conjuntos de dados, como informações sobre as emissões de poluentes e custos de manutenção, poderia proporcionar uma visão mais abrangente sobre o desempenho dos veículos.
+
+Explorar variáveis adicionais, como o tipo de combustível e a presença de tecnologias de economia de combustível, também pode agregar valor às análises futuras. A investigação de dados mais granulares, como o desempenho de veículos em diferentes condições de estrada, pode oferecer insights ainda mais detalhados sobre a eficiência e o comportamento dos veículos.
 
 # Referências
 
@@ -343,11 +368,13 @@ ASSUNÇÃO,  Joaquim Vinicius Carvalho. Uma breve introdução à Mineração de
 
 SILVA, Leandro Augusto Da; PERES, Sarajane Marques;  BOSCARIOLI, Clodis. Introdução à Mineração de Dados: Com Aplicações em R. 1. ed. Barueri: GEN LTC, 2016. ISBN 9788535284478.
 
+FONSECA, Jairo Simon Da. Curso de estatística. 6. ed. São Paulo: Atlas, 1996. ISBN  9788522414710.
+
 # Apêndices
 
-Dicionário de variáveis
+### Dicionário de variáveis
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, out.width='100%', out.height='100%'}
 knitr::include_graphics("./dicionario-variaveis.png")
 ```
 
