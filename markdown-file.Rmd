@@ -179,7 +179,10 @@ Ainda nesse sentido, pode-se analisar o consumo dos carros por marca, fazendo:
 
 ```{r}
 ggplot(mpg, aes(x = manufacturer, y = hwy)) + 
-  geom_boxplot()
+  geom_boxplot() + 
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
 ```
 
 Nota-se que algumas marcas como Chevrolet, Nissan e Toyota têm veículos com consumos mais diversos, o que pode ser uma consequência do maior número de modelos produzidos por elas. Enquanto os carros da Lincoln e Pontiac não apresentam grande variação no consumo.
@@ -254,7 +257,10 @@ Com esses resultados, podemos notar que a marca que apresentou menor variação 
 
 ```{r}
 ggplot(mpg, aes(x = manufacturer)) +
-  geom_bar(color = "black", fill = "white")
+  geom_bar(color = "black", fill = "white") +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
 ```
 
 Assim, como tem-se quantidades de exemplos de cada marca, a análise comparativa entre as marcas fica comprometida.
@@ -301,7 +307,10 @@ Constata-se que na verdade carros mais recentes têm motores com uma média maio
 ggplot(mpg, aes(manufacturer, class, colour = manufacturer, shape = manufacturer)) + 
   geom_count() +
   scale_color_viridis(discrete = TRUE) +
-  scale_shape_manual(values = 1:15)
+  scale_shape_manual(values = 1:15) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
 ```
 
 O gráfico mostra que marcar como Chevrolet, Toyota e Volkswagen têm veículos de diversas classes, enquanto Jeep, Land Rover e Mercury são especializadas em SUVs.
